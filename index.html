@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dance</title>
+    <!-- Typography: Outfit for general, Orbitron for logo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Orbitron:wght@800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Flower Background Canvas -->
+    <div class="flower-bg-overlay"></div>
+
+    <!-- Centered Player Workspace -->
+    <main class="player-wrapper">
+        <!-- Elegant Title -->
+
+
+        <!-- Frosted Video Frame -->
+        <div class="video-player-container" id="videoContainer">
+            <video 
+                id="videoElement" 
+                autoplay 
+                muted 
+                playsinline
+                src="https://drive.google.com/uc?export=download&id=1BB6dMr7yeSOxXc2s_dysjvIS5ZCEZgpl"
+                preload="auto">
+            </video>
+
+            <!-- Loading Spinner -->
+            <div class="loader-overlay" id="loaderOverlay">
+                <div class="flower-spinner">
+                    <div class="petal-one"></div>
+                    <div class="petal-two"></div>
+                </div>
+                <span class="loader-text">CONNECTING STREAM...</span>
+            </div>
+
+            <!-- Buffering Indicator -->
+            <div class="buffering-indicator hidden" id="bufferingIndicator">
+                <div class="buffering-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <!-- Large Centered Play Button Overlay -->
+            <div class="large-play-overlay" id="largePlayOverlay">
+                <button class="large-play-btn" aria-label="Play">
+                    <i data-lucide="play" class="icon-play"></i>
+                    <i data-lucide="pause" class="icon-pause hidden"></i>
+                </button>
+            </div>
+
+            <!-- Custom Controls -->
+            <div class="custom-controls-wrapper" id="customControls">
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar-hover-zone"></div>
+                    <div class="progress-timeline-bg">
+                        <div class="progress-buffered" id="bufferedBar"></div>
+                        <div class="progress-current" id="progressBar"></div>
+                        <div class="progress-handle" id="progressHandle"></div>
+                    </div>
+                    <div class="progress-tooltip" id="progressTooltip">0:00</div>
+                </div>
+
+                <div class="controls-row">
+                    <div class="controls-left">
+                        <button class="control-btn" id="playBtn" title="Play (Space)">
+                            <i data-lucide="play" class="control-icon-play"></i>
+                            <i data-lucide="pause" class="control-icon-pause hidden"></i>
+                        </button>
+
+                        <div class="volume-container">
+                            <button class="control-btn" id="muteBtn" title="Mute (M)">
+                               <i data-lucide="volume-2" class="volume-icon"></i>
+                               <i data-lucide="volume-x" class="mute-icon hidden"></i>
+                            </button>
+                            <div class="volume-slider-wrapper">
+                                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="0.5">
+                            </div>
+                        </div>
+
+                        <div class="time-display">
+                            <span class="time-current" id="timeCurrent">0:00</span>
+                            <span class="time-separator">/</span>
+                            <span class="time-duration" id="timeDuration">0:00</span>
+                        </div>
+                    </div>
+
+                    <div class="controls-right">
+                        <!-- Playback Speed -->
+                        <div class="speed-container">
+                            <button class="control-btn speed-btn" id="speedBtn">1.0x</button>
+                            <ul class="speed-menu hidden" id="speedMenu">
+                                <li data-speed="0.5">0.5x</li>
+                                <li data-speed="0.75">0.75x</li>
+                                <li class="active" data-speed="1">1.0x</li>
+                                <li data-speed="1.5">1.5x</li>
+                                <li data-speed="2">2.0x</li>
+                            </ul>
+                        </div>
+
+                        <!-- Fullscreen -->
+                        <button class="control-btn" id="fullscreenBtn" title="Fullscreen (F)">
+                            <i data-lucide="maximize" class="fs-enter-icon"></i>
+                            <i data-lucide="minimize" class="fs-exit-icon hidden"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Notice -->
+            <div class="stream-error-notice hidden" id="errorOverlay">
+                <i data-lucide="alert-triangle" class="error-icon"></i>
+                <h3 class="error-title">Stream Blocked</h3>
+                <p class="error-description">Google Drive is verifying this file's safety. Please click 'Go to Drive' or download it directly below.</p>
+                <a href="" id="errorFallbackLink" target="_blank" class="fallback-action-btn">
+                    <i data-lucide="external-link"></i> Open on Drive
+                </a>
+            </div>
+        </div>
+
+        <!-- Dance Selector Controls (Pill buttons directly under video) -->
+        <div class="dance-selectors">
+            <button class="dance-selector-btn active" data-id="aiswarya">
+                <span>Aiswarya's Dance</span>
+            </button>
+            <button class="dance-selector-btn" data-id="arya">
+                <span>Arya's Dance</span>
+            </button>
+            <button class="dance-selector-btn" data-id="group">
+                <span>Group Dance</span>
+            </button>
+        </div>
+
+        <!-- Shared Action Links (Drive & Download) -->
+        <div class="action-buttons-row">
+            <a href="" id="driveBtn" target="_blank" class="action-link drive-link" title="Open on Google Drive">
+                <i data-lucide="external-link"></i>
+                <span>Go to Drive</span>
+            </a>
+            <a href="" id="downloadBtn" target="_blank" class="action-link download-link" title="Download raw file">
+                <i data-lucide="download"></i>
+                <span>Download Video</span>
+            </a>
+        </div>
+    </main>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
