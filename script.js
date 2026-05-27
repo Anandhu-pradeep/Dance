@@ -45,6 +45,27 @@ function getGoogleDriveViewUrl(url) {
     return url;
 }
 
+// Helper to construct a direct browser-forced download link for mobile
+function getGoogleDriveDownloadUrl(url) {
+    if (!url) return "";
+    let fileId = "";
+    
+    if (url.includes("id=")) {
+        const match = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) fileId = match[1];
+    } else {
+        const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) fileId = match[1];
+    }
+    
+    if (fileId) {
+        // drive.usercontent.google.com bypasses mobile OS app intent captures,
+        // forcing the file to open inside Safari/Chrome so the download functions correctly.
+        return `https://drive.usercontent.google.com/download?id=${fileId}&export=download`;
+    }
+    return url;
+}
+
 // Current Active State
 let currentVideoIndex = 0;
 let isScrubbing = false;
@@ -106,10 +127,9 @@ document.addEventListener("DOMContentLoaded", () => {
     function loadVideoDetails(item) {
         // Set dynamic URL targets
         const viewUrl = getGoogleDriveViewUrl(item.src);
-        const streamUrl = getGoogleDriveStreamUrl(item.src);
         
         driveBtn.href = viewUrl;
-        downloadBtn.href = streamUrl;
+        downloadBtn.href = getGoogleDriveDownloadUrl(item.src);
         errorFallbackLink.href = viewUrl;
         
         // Sync the active class across the selector buttons
